@@ -23,3 +23,7 @@ proc-macro = true
 syn = { version = "1", default-features = false, features = ["derive", "full", "parsing", "printing", "proc-macro"] }
 quote = { version = "1", default-features = false }
 proc-macro2 = { version = "1", default-features = false, features = ["proc-macro"] }
+
+
+[features]
+enable-histogram = []

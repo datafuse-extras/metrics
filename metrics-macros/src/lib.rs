@@ -140,11 +140,18 @@ pub fn register_gauge(input: TokenStream) -> TokenStream {
     get_register_and_op_code::<bool>("gauge", key, labels, None).into()
 }
 
+#[cfg(feature = "enable_histogram")]
 #[proc_macro]
 pub fn register_histogram(input: TokenStream) -> TokenStream {
     let WithoutExpression { key, labels } = parse_macro_input!(input as WithoutExpression);
 
     get_register_and_op_code::<bool>("histogram", key, labels, None).into()
+}
+
+#[cfg(not(feature = "enable_histogram"))]
+#[proc_macro]
+pub fn register_histogram(_input: TokenStream) -> TokenStream {
+    (quote! { Histogram::noop() }).into()
 }
 
 #[proc_macro]
@@ -191,12 +198,21 @@ pub fn gauge(input: TokenStream) -> TokenStream {
     get_register_and_op_code("gauge", key, labels, Some(("set", op_value))).into()
 }
 
+#[cfg(feature = "enable_histogram")]
 #[proc_macro]
 pub fn histogram(input: TokenStream) -> TokenStream {
     let WithExpression { key, op_value, labels } = parse_macro_input!(input as WithExpression);
 
     get_register_and_op_code("histogram", key, labels, Some(("record", op_value))).into()
 }
+
+//#[proc_macro]
+//pub fn histogram(input: TokenStream) -> TokenStream {
+//    let WithExpression { key, op_value, labels } = parse_macro_input!(input as WithExpression);
+//    (quote!({
+//       let _ = #labels;
+//    })).into()
+//}
 
 fn get_describe_code(
     metric_type: &str,

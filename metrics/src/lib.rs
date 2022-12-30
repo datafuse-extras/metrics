@@ -798,4 +798,17 @@ pub use metrics_macros::decrement_gauge;
 /// histogram!(format!("{}_via_format", "name"), 3.14);
 /// # }
 /// ```
+#[cfg(feature = "enable_histogram")]
 pub use metrics_macros::histogram;
+
+/// Dummy Macro, does nothing
+#[cfg(not(feature = "enable_histogram"))]
+#[macro_export]
+macro_rules! histogram{
+    ($name:expr, $value:expr, $labels:expr) => {
+        let (_, _, _) = ($name, $value, $labels);
+    };
+    ($name:expr, $value:expr) => {
+        let (_, _) = ($name, $value);
+    };
+}
