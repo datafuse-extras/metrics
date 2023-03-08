@@ -140,7 +140,7 @@ pub fn register_gauge(input: TokenStream) -> TokenStream {
     get_register_and_op_code::<bool>("gauge", key, labels, None).into()
 }
 
-#[cfg(feature = "enable_histogram")]
+#[cfg(feature = "enable-histogram")]
 #[proc_macro]
 pub fn register_histogram(input: TokenStream) -> TokenStream {
     let WithoutExpression { key, labels } = parse_macro_input!(input as WithoutExpression);
@@ -148,7 +148,7 @@ pub fn register_histogram(input: TokenStream) -> TokenStream {
     get_register_and_op_code::<bool>("histogram", key, labels, None).into()
 }
 
-#[cfg(not(feature = "enable_histogram"))]
+#[cfg(not(feature = "enable-histogram"))]
 #[proc_macro]
 pub fn register_histogram(_input: TokenStream) -> TokenStream {
     (quote! { Histogram::noop() }).into()
@@ -198,7 +198,7 @@ pub fn gauge(input: TokenStream) -> TokenStream {
     get_register_and_op_code("gauge", key, labels, Some(("set", op_value))).into()
 }
 
-#[cfg(feature = "enable_histogram")]
+#[cfg(feature = "enable-histogram")]
 #[proc_macro]
 pub fn histogram(input: TokenStream) -> TokenStream {
     let WithExpression { key, op_value, labels } = parse_macro_input!(input as WithExpression);
